@@ -3,14 +3,14 @@ import { Reveal } from "@/components/site/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
 
 const spanClass: Record<string, string> = {
-  wide: "sm:col-span-2 lg:col-span-2 lg:row-span-1",
-  tall: "lg:row-span-2",
+  wide: "sm:col-span-2",
+  tall: "",
   regular: "",
 };
 
 const aspectClass: Record<string, string> = {
   wide: "aspect-16/9",
-  tall: "aspect-3/4 lg:h-full",
+  tall: "aspect-4/3",
   regular: "aspect-4/3",
 };
 
@@ -29,7 +29,7 @@ export function MediaGrid() {
           description="A rolling record of what members are building, the sites we visit and the projects recognised at the Awards of Excellence."
         />
 
-        <div className="mt-16 grid auto-rows-[1fr] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {media.map((item, i) => (
             <Reveal
               key={item.id}
