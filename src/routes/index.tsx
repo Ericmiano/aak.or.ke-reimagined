@@ -1,24 +1,98 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { Header } from "@/components/site/Header";
+import { Footer } from "@/components/site/Footer";
+import { Hero } from "@/components/home/Hero";
+import { EventsStrip } from "@/components/home/EventsStrip";
+import { Spotlight } from "@/components/home/Spotlight";
+import { Initiatives } from "@/components/home/Initiatives";
+import { Chapters } from "@/components/home/Chapters";
+import { MediaGrid } from "@/components/home/MediaGrid";
+import { Publications } from "@/components/home/Publications";
+import { Membership } from "@/components/home/Membership";
+import { events } from "@/data/site";
+
+const SITE_URL = "https://aak.or.ke";
+const TITLE = "AAK | Architectural Association of Kenya";
+const DESCRIPTION =
+  "The Architectural Association of Kenya unites eight built-environment chapters. Explore events, awards, green building standards and member services.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Architectural Association of Kenya" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function structuredData() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "Architectural Association of Kenya",
+        alternateName: "AAK",
+        url: SITE_URL,
+        foundingDate: "1967",
+        description: DESCRIPTION,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Nairobi",
+          addressCountry: "KE",
+        },
+      },
+      {
+        "@type": "ItemList",
+        name: "Upcoming AAK events",
+        itemListElement: events.map((event, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "Event",
+            name: event.title,
+            startDate: event.isoDate,
+            ...(event.endIsoDate ? { endDate: event.endIsoDate } : {}),
+            eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+            eventStatus: "https://schema.org/EventScheduled",
+            location: { "@type": "Place", name: event.location },
+            url: event.href,
+            organizer: { "@id": `${SITE_URL}/#organization` },
+          },
+        })),
+      },
+    ],
+  };
+}
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()) }}
       />
-    </div>
+      <Header />
+      <main>
+        <Hero />
+        <EventsStrip />
+        <Spotlight />
+        <Initiatives />
+        <Chapters />
+        <MediaGrid />
+        <Publications />
+        <Membership />
+      </main>
+      <Footer />
+    </>
   );
 }
