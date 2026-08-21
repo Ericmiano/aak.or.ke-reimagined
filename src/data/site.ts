@@ -459,3 +459,27 @@ export const arbitrationSteps: ArbitrationStep[] = [
     body: "The award is final and binding under the Arbitration Act, 1995, and enforceable through the High Court. Appeal is limited to the narrow grounds the Act allows.",
   },
 ];
+
+/* Navigation -------------------------------------------------------- */
+
+export interface NavLink {
+  label: string;
+  /** Internal route or external URL */
+  href: string;
+  external?: boolean;
+}
+
+export const navLinks: NavLink[] = [
+  { label: "Events", href: "/events" },
+  { label: "Arbitration", href: "/arbitration" },
+  { label: "Chapters", href: "/#chapters" },
+  { label: "Projects", href: "/#initiatives" },
+  { label: "Media", href: "/#media" },
+  { label: "About", href: "https://aak.or.ke/about-us/", external: true },
+];
+
+export const utilityLinks: NavLink[] = [
+  { label: "Members directory", href: "https://members.aak.or.ke/directory", external: true },
+  { label: "Validate a certificate", href: "https://members.aak.or.ke/validate", external: true },
+  { label: "info@aak.or.ke", href: "mailto:info@aak.or.ke", external: true },
+];
